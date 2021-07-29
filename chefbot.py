@@ -6,7 +6,7 @@ from dotenv import load_dotenv
 from flask import Flask, request
 
 load_dotenv()
-openai.api_key = os.environ.get('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')
+openai.api_key = os.environ.get('OPENAI_API_KEY')
 completion = openai.Completion()
 
 start_sequence = "\nChef:"
