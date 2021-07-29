@@ -1,5 +1,5 @@
 from flask import Flask, request, session
-from jabebot import append_interaction_to_chat_log, ask
+from ava import append_interaction_to_chat_log, ask
 from twilio.twiml.messaging_response import MessagingResponse
 
 app = Flask(__name__)
@@ -19,3 +19,4 @@ def jabe():
 
 if __name__ == '__main__':
     app.run(debug=True)
+ 
