@@ -5,7 +5,7 @@ from chefbot import append_interaction_to_chat_log, ask
 
 app = Flask(__name__)
 # if for some reason, your conversation with the chef gets weird, change the secret key 
-app.config['SECRET_KEY'] = 'top-NSFJSFDKFjkfsk!'
+app.config['SECRET_KEY'] = '89djhff9lhkd9'
 
 @app.route('/chefbot', methods=['POST'])
 def chef():
