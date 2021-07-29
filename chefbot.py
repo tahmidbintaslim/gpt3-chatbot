@@ -1,23 +1,35 @@
-from chefbot import append_interaction_to_chat_log, ask
-from flask import Flask, request, session
-from twilio.twiml.messaging_response import MessagingResponse
+import os
+from random import choice
 
-app = Flask(__name__)
-# if for some reason, your conversation with the chef gets weird, change the secret key 
-app.config['SECRET_KEY'] = 'top-NSFJSFDKFjkfsk!'
+import openai
+from dotenv import load_dotenv
+from flask import Flask, request
 
-@app.route('/chefbot', methods=['POST'])
-def chef():
-    incoming_msg = request.values['Body']
-    chat_log = session.get('chat_log')
-    answer = ask(incoming_msg, chat_log)
-    session['chat_log'] = append_interaction_to_chat_log(incoming_msg, answer,
-                                                         chat_log)
-    # print("the session chat_log = ", chat_log)
+load_dotenv()
+openai.api_key = os.environ.get('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')
+completion = openai.Completion()
 
-    msg = MessagingResponse()
-    msg.message(answer)
-    return str(msg)
+start_sequence = "\nChef:"
+restart_sequence = "\n\nPerson:"
+session_prompt="""You are talking to a Michelin star chef who was mentored by Gordon Ramsay in the past. The chef has published 3 award winning cookbooks and had their own cooking channel on Youtube. You can ask for recipes based off the ingredients you buy at the store. \n\nChef: I am a chef who recently became popular as an internet sensation during COVID-19. How may I help you today?\n\nPerson: How did you get your work become known to the public? \nChef: I started a blog and Youtube channel to show my dishes to the internet. \n\nPerson: How did you get noticed by Chef Gordon Ramsay?\nChef: I invited him to a VIP taste test at my Michelin star restaurant. That's when we met for the first time in person.\n\nPerson: What is your favorite Italian dessert? \nChef: Panna cotta is my favorite Italian dessert. \n\nPerson: What should I cook with milk? \nChef: If you want to add something sweet and creamy to your dishes, milk is a great ingredient choice. You can use it to make sauces, smoothies or desserts. For example, if you make a savory sauce, you can make it creamy by adding milk. If you make a smoothie, you can make it creamier by adding milk.\n\nPerson: What is your favorite drink?\nChef: I am a huge fan of Thai tea. \n\nPerson: I have strawberries, blueberries, milk, and chocolate. What should I cook with them?\nChef: If you combine strawberries, blueberries, milk, and chocolate, you can make a delicious smoothie.
+"""
 
-if __name__ == '__main__':
-    app.run(debug=True)
+def ask(question, chat_log=None):
+    prompt_text = f'{chat_log}{restart_sequence}: {question}{start_sequence}:'
+    response = openai.Completion.create(
+      engine="davinci",
+      prompt=prompt_text,
+      temperature=0.7,
+      max_tokens=96,
+      top_p=1,
+      frequency_penalty=0,
+      presence_penalty=0.3,
+      stop=["\n"],
+    )
+    story = response['choices'][0]['text']
+    return str(story)
+
+def append_interaction_to_chat_log(question, answer, chat_log=None):
+    if chat_log is None:
+        chat_log = session_prompt
+    return f'{chat_log}{restart_sequence} {question}{start_sequence}{answer}'
