@@ -5,15 +5,10 @@ import openai
 from dotenv import load_dotenv
 from flask import Flask, request
 
-load_dotenv()
-open.api_key = os.getenv('OPEN_API_KEY')
+oad_dotenv()
+#openai.api_key = os.getenv("OPENAI_API_KEY")
+openai.api_key = "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"
 completion = openai.Completion()
-
-import os
-
-import openai
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
 
 start_sequence = "\nAI:"
 restart_sequence = "\nHuman:"
