@@ -1,10 +1,11 @@
-from adaptivityai import append_interaction_to_chat_log, ask
 from flask import Flask, request, session
 from twilio.twiml.messaging_response import MessagingResponse
 
+from adaptivityai import append_interaction_to_chat_log, ask
+
 app = Flask(__name__)
 # if for some reason, your conversation with the chef gets weird, change the secret key 
-app.config['SECRET_KEY'] = 'V1-NSFJSFDKFjkfsk!'
+app.config['SECRET_KEY'] = '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'
 
 @app.route('/adaptivityai', methods=['POST'])
 def chef():
