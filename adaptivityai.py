@@ -11,7 +11,7 @@ from dotenv import load_dotenv
 from flask import Flask, request
 
 load_dotenv()
-openai.api_key = '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'
+openai.api_key = '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'
 completion = openai.Completion()
 
 start_sequence = "\nAva:"
